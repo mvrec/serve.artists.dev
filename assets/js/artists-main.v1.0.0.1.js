@@ -23,8 +23,8 @@
 
   $(function () {
     // stickyHeader();
-    mobileHeader();
-    homeHeroSlider();
+    //mobileHeader();
+   // homeHeroSlider();
     dynamicBackground();
     slickInit();
     hobbleEffect();
