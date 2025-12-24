@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (promo) promo.style.display = "block";
       if (nickname) nickname.textContent = "NOT CLAIMED";
 
-      [".artist__social", ".artist__code", ".artist__sinfo", ".artist__link"].forEach((sel) => {
+      [".artist_rmve", ".artist__code", ".artist__sinfo", ".artist__link"].forEach((sel) => {
         $$(sel).forEach((el) => el.remove());
       });
 
