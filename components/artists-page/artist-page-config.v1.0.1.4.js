@@ -189,34 +189,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const aspectClass = isShort ? "aspect-[9/16]" : "aspect-video";
 
         const a = document.createElement("a");
-      a.href = `https://youtube.com/watch?v=${videoId}`;
-      a.target = "_blank";
-      a.className = "video-item group";
+        a.href = `https://youtube.com/watch?v=${videoId}`;
+        a.target = "_blank";
+        a.className = "video-item group";
 
-      a.innerHTML = `
+        a.innerHTML = `
         <div class="w-full ${aspectClass} rounded-lg overflow-hidden relative shadow-xl mb-3 bg-neutral-800 flex items-center justify-center">
           <img class="plyst-thumb w-full h-full object-cover object-center transition duration-300 group-hover:opacity-80" src="" alt="Thumbnail">
           ${
             isShort
-              ? `<span class="absolute top-2 left-2 bg-red-600/90 text-white text-[9px] font-semibold px-2 py-0.5 rounded">
-                   SHORTS
-                 </span>`
-              : ""
+              ? `<span class="absolute top-2 left-2 bg-red-600/90 text-white text-sm font-medium px-2 py-0.5 rounded">SHORTS</span><svg class="absolute w-10 h-10 text-brand-500 opacity-80 group-hover:opacity-100 transition duration-300" viewBox="0 0 98.94 122.88" style="enable-background:new 0 0 98.94 122.88">
+	<path d="M63.49 2.71c11.59-6.04 25.94-1.64 32.04 9.83 6.1 11.47 1.65 25.66-9.94 31.7l-9.53 5.01c8.21.3 16.04 4.81 20.14 12.52 6.1 11.47 1.66 25.66-9.94 31.7l-50.82 26.7c-11.59 6.04-25.94 1.64-32.04-9.83-6.1-11.47-1.65-25.66 9.94-31.7l9.53-5.01c-8.21-.3-16.04-4.81-20.14-12.52-6.1-11.47-1.65-25.66 9.94-31.7l50.82-26.7zM36.06 42.53l30.76 18.99-30.76 18.9V42.53z" fill="#f40407"></path>
+	<path d="M36.06,42.53 V 80.42 L 66.82,61.52Z" fill="#fff"></path>
+</svg>` : `<svg class="absolute w-10 h-10 text-brand-500 opacity-80 group-hover:opacity-100 transition duration-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" fill="red"></path></svg>`
           }
-          <svg class="absolute w-10 h-10 text-brand-500 opacity-80 group-hover:opacity-100 transition duration-300"
-               fill="currentColor" viewBox="0 0 24 24">
-            <path d="M16 9v2H8V9h8zm0 4v2H8v-2h8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
-                     10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8
-                     s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-          </svg>
+          
         </div>
         <p class="text-base! font-syne font-medium truncate">${item.title}</p>
         <p class="text-sm text-gray-400 truncate">${day} ${month}</p>
       `;
 
-      container.appendChild(a);
-      a.querySelector(".plyst-thumb").src = await checkThumbnail(videoId);
-    }
+        container.appendChild(a);
+        a.querySelector(".plyst-thumb").src = await checkThumbnail(videoId);
+      }
     } catch (err) {
       console.error("Error fetching channel videos:", err);
     }
