@@ -88,13 +88,105 @@ document.addEventListener("DOMContentLoaded", () => {
         $$(sel).forEach((el) => el.remove());
       });
 
-      if (headCover) headCover.style.background = "url(https://cdn.jsdelivr.net/gh/mvrec/serve.artists.dev@master/assets/img/mix_vibe_artists_share.webp)";
+      if (headCover)
+        headCover.style.background = "url(https://cdn.jsdelivr.net/gh/mvrec/serve.artists.dev@master/assets/img/mix_vibe_artists_share.webp)";
     } else {
       if (vTogle) vTogle.classList.remove("hidden");
-      if (profileEle) profileEle.insertAdjacentHTML("beforeend",`<div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg"><img alt="Verified Badge" class="w-7 h-7" src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg"></div>`);
+      if (profileEle)
+        profileEle.insertAdjacentHTML(
+          "beforeend",
+          `<div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg"><img alt="Verified Badge" class="w-7 h-7" src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg"></div>`
+        );
     }
   }
   checkClaimed();
+
+  // ===== YOUTUBE Video TAB =====
+  async function youTubeVideosTab() {
+    const playChlSpan = $("span[data-yt-channel]");
+    if (!playChlSpan) return;
+
+    const playChlId = playChlSpan.attr("data-yt-channel");
+    if (!playChlId) return;
+
+    const tabChlVideos = document.createElement("div");
+    tabChlVideos.id = "content-yt-videos";
+    tabChlVideos.className = "tab-content hidden";
+    tabChlVideos.innerHTML = `
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-base! font-NPM">YouTube Videos</h2>
+        <div class="flex items-center space-x-4">
+          <a href="https://www.youtube.com/channel/${playChlId}?sub_confirmation=1" target="_blank" class="text-brand-500 hover:text-lime-300 text-sm">View All</a>
+        </div>
+      </div>
+      <div id="yTvideos" class="yT-container"></div>
+    `;
+    tabContentsContainer.appendChild(tabChlVideos);
+
+    const btn = document.createElement("button");
+    btn.id = "tab-yt-videos";
+    btn.className = "tab-button font-NPM pb-2 focus:outline-none";
+    btn.textContent = "YT VIDEOS";
+    btn.addEventListener("click", () => showTab("yt-videos"));
+    tabButtonsContainer.appendChild(btn);
+
+    const container = $("#yTvideos");
+
+    const checkThumbnail = (videoId) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () =>
+          resolve(
+            img.width <= 120 ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+          );
+        img.onerror = () => resolve(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`);
+        img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        setTimeout(() => resolve(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`), 2000);
+      });
+
+    try {
+      const feedURL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(
+        `https://www.youtube.com/feeds/videos.xml?channel_id=${playChlId}`
+      )}`;
+
+      const response = await fetch(feedURL);
+      const data = await response.json();
+      if (!data.items) return;
+
+      for (const item of data.items) {
+        const videoId = item.link.split("v=")[1];
+        const pubDate = new Date(item.pubDate);
+
+        const day = ("0" + pubDate.getDate()).slice(-2);
+        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const month = monthNames[pubDate.getMonth()];
+
+        const a = document.createElement("a");
+        a.href = `https://youtube.com/watch?v=${videoId}`;
+        a.target = "_blank";
+        a.className = "video-item group";
+        a.innerHTML = `
+        <div class="w-full aspect-video rounded-lg overflow-hidden relative shadow-xl mb-3 bg-neutral-800 flex items-center justify-center">
+          <img class="plyst-thumb w-full h-full object-cover transition duration-300 group-hover:opacity-80" src="" alt="">
+          <svg class="absolute w-10 h-10 text-brand-500 opacity-80 group-hover:opacity-100 transition duration-300"
+               fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16 9v2H8V9h8zm0 4v2H8v-2h8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+                     10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8
+                     s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+          </svg>
+        </div>
+        <p class="text-base! font-syne font-medium truncate">${item.title}</p>
+        <p class="text-sm text-gray-400 truncate">${day} ${month}</p>
+      `;
+
+        container.appendChild(a);
+        a.querySelector(".plyst-thumb").src = await checkThumbnail(videoId);
+      }
+    } catch (err) {
+      console.error("Error fetching channel videos:", err);
+    }
+  }
+  youTubeVideosTab();
 
   // ===== YOUTUBE PLAYLIST TAB =====
   async function youTubePlaylistVideosTab() {
@@ -108,13 +200,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!playlistIds.length) return;
 
     const tabVideos = document.createElement("div");
-    tabVideos.id = "content-videos";
+    tabVideos.id = "content-ytp-videos";
     tabVideos.className = "tab-content hidden";
     tabVideos.innerHTML = `
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-base! font-NPM">Featured YouTube Playlist${playlistIds.length > 1 ? "'s" : ""}</h2>
         <div class="flex items-center space-x-4">
-          <a href="#" class="text-brand-500 hover:text-lime-300 text-sm">View All</a>
         </div>
       </div>
       <div id="yTpvideos" class="yTp-container"></div>
@@ -122,10 +213,10 @@ document.addEventListener("DOMContentLoaded", () => {
     tabContentsContainer.appendChild(tabVideos);
 
     const btn = document.createElement("button");
-    btn.id = "tab-videos";
+    btn.id = "tab-ytp-videos";
     btn.className = "tab-button font-NPM pb-2 focus:outline-none";
-    btn.textContent = "VIDEOS";
-    btn.addEventListener("click", () => showTab("videos"));
+    btn.textContent = "PLAYLIST VIDEOS";
+    btn.addEventListener("click", () => showTab("ytp-videos"));
     tabButtonsContainer.appendChild(btn);
 
     const container = $("#yTpvideos");
