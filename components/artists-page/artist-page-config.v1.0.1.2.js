@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const playChlSpan = $("span[data-yt-channel]");
     if (!playChlSpan) return;
 
-    const playChlId = playChlSpan.attr("data-yt-channel");
+    const playChlId = playChlSpan.getAttribute("data-yt-channel");
     if (!playChlId) return;
 
     const tabChlVideos = document.createElement("div");
