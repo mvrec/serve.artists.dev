@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <a href="https://www.youtube.com/channel/${playChlId}?sub_confirmation=1" target="_blank" class="text-brand-500 hover:text-lime-300 text-sm">View All</a>
         </div>
       </div>
-      <div id="yTvideos" class="yT-container"></div>
+      <div id="yTvideos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 yT-container"></div>
     `;
     tabContentsContainer.appendChild(tabChlVideos);
 
@@ -131,6 +131,28 @@ document.addEventListener("DOMContentLoaded", () => {
     tabButtonsContainer.appendChild(btn);
 
     const container = $("#yTvideos");
+
+    // ===== Helpers =====
+    function getYouTubeVideoId(url) {
+      try {
+        const u = new URL(url);
+
+        if (u.pathname.startsWith("/shorts/")) {
+          return u.pathname.split("/shorts/")[1].split("?")[0];
+        }
+
+        if (u.searchParams.get("v")) {
+          return u.searchParams.get("v");
+        }
+
+        if (u.hostname === "youtu.be") {
+          return u.pathname.slice(1);
+        }
+      } catch (e) {
+        return null;
+      }
+      return null;
+    }
 
     const checkThumbnail = (videoId) =>
       new Promise((resolve) => {
@@ -144,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => resolve(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`), 2000);
       });
 
+    // ===== Fetch Channel Feed =====
     try {
       const feedURL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(
         `https://www.youtube.com/feeds/videos.xml?channel_id=${playChlId}`
@@ -154,20 +177,32 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!data.items) return;
 
       for (const item of data.items) {
-        const videoId = item.link.split("v=")[1];
+        const isShort = item.link.includes("/shorts/");
+        const videoId = getYouTubeVideoId(item.link);
+        if (!videoId) continue;
         const pubDate = new Date(item.pubDate);
 
         const day = ("0" + pubDate.getDate()).slice(-2);
         const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
         const month = monthNames[pubDate.getMonth()];
 
+        const aspectClass = isShort ? "aspect-[9/16]" : "aspect-video";
+
         const a = document.createElement("a");
-        a.href = `https://youtube.com/watch?v=${videoId}`;
-        a.target = "_blank";
-        a.className = "video-item group";
-        a.innerHTML = `
-        <div class="w-full aspect-video rounded-lg overflow-hidden relative shadow-xl mb-3 bg-neutral-800 flex items-center justify-center">
-          <img class="plyst-thumb w-full h-full object-cover transition duration-300 group-hover:opacity-80" src="" alt="">
+      a.href = `https://youtube.com/watch?v=${videoId}`;
+      a.target = "_blank";
+      a.className = "video-item group";
+
+      a.innerHTML = `
+        <div class="w-full ${aspectClass} rounded-lg overflow-hidden relative shadow-xl mb-3 bg-neutral-800 flex items-center justify-center">
+          <img class="plyst-thumb w-full h-full object-cover object-center transition duration-300 group-hover:opacity-80" src="" alt="Thumbnail">
+          ${
+            isShort
+              ? `<span class="absolute top-2 left-2 bg-red-600/90 text-white text-[9px] font-semibold px-2 py-0.5 rounded">
+                   SHORTS
+                 </span>`
+              : ""
+          }
           <svg class="absolute w-10 h-10 text-brand-500 opacity-80 group-hover:opacity-100 transition duration-300"
                fill="currentColor" viewBox="0 0 24 24">
             <path d="M16 9v2H8V9h8zm0 4v2H8v-2h8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
@@ -179,9 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="text-sm text-gray-400 truncate">${day} ${month}</p>
       `;
 
-        container.appendChild(a);
-        a.querySelector(".plyst-thumb").src = await checkThumbnail(videoId);
-      }
+      container.appendChild(a);
+      a.querySelector(".plyst-thumb").src = await checkThumbnail(videoId);
+    }
     } catch (err) {
       console.error("Error fetching channel videos:", err);
     }
