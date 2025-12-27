@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $$(sel).forEach((el) => el.remove());
       });
 
-      if (headCover) headCover.style.background = "url(https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/bgimgs/mixbgmx8.webp)";
+      if (headCover) headCover.style.background = "url(https://cdn.jsdelivr.net/gh/mvrec/serve.artists.dev@master/assets/img/mix_vibe_artists_share.webp)";
     } else {
       if (vTogle) vTogle.classList.remove("hidden");
       if (profileEle) profileEle.insertAdjacentHTML("beforeend",`<div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg"><img alt="Verified Badge" class="w-7 h-7" src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg"></div>`);
