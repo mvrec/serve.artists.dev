@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const playChlSpan = $("span[data-yt-channel]");
     if (!playChlSpan) return;
 
-    const playChlId = playChlSpan.getAttribute("data-yt-channel");
+    const playChlId = (playChlSpan.getAttribute("data-yt-channel") || "").trim();
     if (!playChlId) return;
 
     const tabChlVideos = document.createElement("div");
@@ -223,10 +223,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const playlistSpan = $("span[data-yt-playlist]");
     if (!playlistSpan) return;
 
-    const playlistIds = playlistSpan
-      .getAttribute("data-yt-playlist")
+    const playlistAttr = (playlistSpan.getAttribute("data-yt-playlist") || "").trim();
+    if (!playlistAttr) return;
+
+    const playlistIds = playlistAttr
       .split(",")
-      .map((id) => id.trim());
+      .map((id) => id.trim())
+      .filter((id) => id);
     if (!playlistIds.length) return;
 
     const tabVideos = document.createElement("div");
@@ -329,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         embedType = "album";
       }
       if (pinId) {
-        if (pImage) pImage.classList.add("artist-pick");
+        if (pImage) pImage.classList.add("artist-pick", "cursor-pointer");
         if (sptyIframe) {
           sptyIframe.src = `https://open.spotify.com/embed/${embedType}/${pinId}?theme=0`;
         }
