@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
          const pImg = profileEle.querySelector("img");
          const pImageSrc = pImg?.src || "";
          const pImageAlt = pImg?.alt || "Profile";
-         profile.outerHTML = `
+         profileEle.outerHTML = `
 <div id="profile-dp" class="relative shrink-0 w-[200px] h-[200px] group [perspective:1000px] cursor-pointer">
     <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
         <!-- Front Side -->
