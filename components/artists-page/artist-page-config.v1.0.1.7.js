@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       if (vTogle) vTogle.classList.remove("hidden");
       if (profileEle){
-         const pImg = profileEle.$("img");
+         const pImg = profileEle.querySelector("img");
          const pImageSrc = pImg?.src || "";
          const pImageAlt = pImg?.alt || "Profile";
          profile.outerHTML = `
