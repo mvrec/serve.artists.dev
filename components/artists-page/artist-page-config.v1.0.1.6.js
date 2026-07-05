@@ -92,11 +92,33 @@ document.addEventListener("DOMContentLoaded", () => {
         headCover.style.background = "url(https://cdn.jsdelivr.net/gh/mvrec/serve.artists.dev@master/assets/img/mix_vibe_artists_share.webp)";
     } else {
       if (vTogle) vTogle.classList.remove("hidden");
-      if (profileEle)
-        profileEle.insertAdjacentHTML(
-          "beforeend",
-          `<div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg"><img alt="Verified Badge" class="w-7 h-7" src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg"></div>`
-        );
+      if (profileEle){
+         const pImg = profileEle.$("img");
+         const pImageSrc = pImg?.src || "";
+         const pImageAlt = pImg?.alt || "Profile";
+         profile.outerHTML = `
+<div id="profile-dp" class="relative shrink-0 w-[200px] h-[200px] group [perspective:1000px] cursor-pointer">
+    <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+        <!-- Front Side -->
+        <div class="absolute inset-0 [backface-visibility:hidden]">
+            <img src="${pImageSrc}" alt="${pImageAlt}" class="w-full h-full rounded-2xl object-cover artist-pick shadow-xl">
+            <div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg">
+                <img src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg" alt="Verified Badge" class="w-7 h-7">
+            </div>
+        </div>
+        <!-- Back Side -->
+        <div class="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl bg-[#0d0d0d] border border-lime-500/30 shadow-[0_0_30px_rgba(154,230,0,0.15)] flex flex-col items-center justify-center p-4 text-center">
+            <img src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg" alt="Verified" class="w-16 h-16 mb-3 drop-shadow-[0_0_15px_rgba(154,230,0,0.5)]">
+            <h3 class="text-xl font-semibold font-NPM text-brand-500 tracking-wider">VERIFIED</h3>
+            <p class="text-[10px] text-gray-400 mt-2 font-syne uppercase tracking-widest">Official Artist</p>
+        </div>
+    </div>
+</div>`;
+      }
+        // profileEle.insertAdjacentHTML(
+        //   "beforeend",
+        //   `<div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg"><img alt="Verified Badge" class="w-7 h-7" src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg"></div>`
+        // );
     }
   }
   checkClaimed();
