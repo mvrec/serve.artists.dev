@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <!-- Back Side -->
         <div class="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl bg-[#0d0d0d] border border-lime-500/30 shadow-[0_0_30px_rgba(154,230,0,0.15)] flex flex-col items-center justify-center p-4 text-center">
-            <img src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg" alt="Verified" class="w-16 h-16 mb-3 drop-shadow-[0_0_15px_rgba(154,230,0,0.5)]">
+            <img src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg" alt="Verified" class="w-15 h-15 mb-3 drop-shadow-[0_0_15px_rgba(154,230,0,0.5)]">
             <h3 class="text-xl font-medium font-ZSE text-gray-200 tracking-wider">VERIFIED</h3>
             <p class="text-[10px] text-brand-500  mt-2 font-cd uppercase tracking-widest">Mix Vibe Records™</p>
         </div>
