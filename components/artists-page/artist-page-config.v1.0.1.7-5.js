@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
         <!-- Front Side -->
         <div class="absolute inset-0 [backface-visibility:hidden]">
-            <img src="${pImageSrc}" alt="${pImageAlt}" class="w-full h-full rounded-2xl object-cover shadow-xl  border border-white/5">
+            <img src="${pImageSrc}" alt="${pImageAlt}" class="w-full h-full rounded-2xl object-cover aspect-square shadow-xl border border-white/5">
             <div class="verified absolute bottom-2 right-2 p-1 rounded-full shadow-lg">
                 <img src="https://cdn.jsdelivr.net/gh/mvrec/files.mvr.dev@master/img/svg/vfyd.svg" alt="Verified Badge" class="w-7 h-7">
             </div>
